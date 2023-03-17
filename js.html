@@ -1,3 +1,43 @@
 <script>
-    
+  function crearTablaContactos()
+  {
+      google.script.run.withSuccessHandler
+      (
+          function (obj) 
+          {              
+            let tabla = document.getElementById('tablaContactos');
+                if(tabla) tabla.remove();
+                tabla = document.createElement('table');
+                tabla.id = 'tablaContactos';
+
+              let tablaHeader = document.createElement('thead');
+              let tablaBody = document.createElement('tbody');
+
+              for (let i = 0;i < obj.length;i++) {
+                  let fila = document.createElement('tr');
+                  for (let j = 0;j < obj[i].length;j++) {
+                      console.log(obj[i][j]);
+                      let celda = document.createElement('td');
+                      celda.textContent = obj[i][j];
+                      fila.appendChild(celda);
+
+                      if(i==0)
+                      {
+                          tablaHeader.appendChild(fila);
+                          tabla.appendChild(tablaHeader);
+                      }
+                      else
+                      {
+                          tablaBody.appendChild(fila);
+                      }
+                  }
+                  
+              }
+              tablaHeader.classList.add('table-dark');
+              tabla.appendChild(tablaBody);
+              tabla.classList.add('table','table-striped','border','border-3');
+              document.getElementById('divContactos').appendChild(tabla);
+          }
+      ).obtenerContactos();
+  }
 </script>
