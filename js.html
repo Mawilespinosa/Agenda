@@ -1,17 +1,16 @@
 <script>
 
   function crearTablaContactos()
-  {
+  {      
+    crearLoaderAnillos('divContactos');
       google.script.run
-      .withSuccessHandler(crearTablaContactosCorrecta)
-      .withFailureHandler(crearTablaContactosError)
-      .obtenerContactos();
+          .withSuccessHandler(crearTablaContactosCorrecta)
+          .withFailureHandler(crearTablaContactosError)
+          .obtenerContactos();
   }
 
   function crearTablaContactosCorrecta(obj) {
-                  
-    let tabla = document.getElementById('tablaContactos');
-        if(tabla) tabla.remove();
+        eliminarTabla();
         tabla = document.createElement('table');
         tabla.id = 'tablaContactos';
 
@@ -44,10 +43,12 @@
         document.getElementById('divContactos').appendChild(tabla);
         
         crearNotificacionOk('Contacto obtenidos correctamente','Todo en orden');
+        eliminarLoader();
   }
 
   function crearTablaContactosError() {
-    crearNotificacionError('No se han podido leer los contactos','ERROR')
+    crearNotificacionError('No se han podido leer los contactos','ERROR');
+    eliminarLoader();
   }
 
   function crearNotificacion(mensaje,titulo) {
@@ -89,5 +90,37 @@
     let elemetoNotificacion = document.getElementById('notificacion');
     elemetoNotificacion.style.backgroundColor = getComputedStyle(document.documentElement).getPropertyValue(color);
   } 
+
+  function crearLoader(elementoPadre) {
+    eliminarLoader();
+    let loader = document.createElement('div');
+    loader.id = 'loader'
+    loader.appendChild(document.createElement('div'));
+    loader.appendChild(document.createElement('div'));
+    loader.appendChild(document.createElement('div'));
+    loader.appendChild(document.createElement('div')); 
+    return document.getElementById(elementoPadre).appendChild(loader);
+
+  }
+
+  function crearLoaderPuntos(elementoPadre) {
+    let loader = crearLoader(elementoPadre);
+    loader.classList.add('lds-ellipsis');
+  }
+
+  function crearLoaderAnillos(elementoPadre) {
+    let loader = crearLoader(elementoPadre);
+    loader.classList.add('lds-ring');
+  }
+
+  function eliminarLoader() {
+    let loader = document.getElementById('loader');
+    if(loader) loader.remove();
+  }
+
+  function eliminarTabla() {                      
+      let tabla = document.getElementById('tablaContactos');
+      if (tabla) tabla.remove();
+  }
 
     </script>
