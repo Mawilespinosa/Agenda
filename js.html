@@ -1,4 +1,5 @@
 <script>
+
   function crearTablaContactos()
   {
       google.script.run
@@ -39,28 +40,54 @@
         }
         tablaHeader.classList.add('table-dark');
         tabla.appendChild(tablaBody);
-        tabla.classList.add('table','table-striped','border','border-3');
+        tabla.classList.add('table','table-striped','border','border-4','border-dark');
         document.getElementById('divContactos').appendChild(tabla);
         
-        crearNotificacion(1,'Contacto obtenidos correctamente','Todo en orden')
+        crearNotificacionOk('Contacto obtenidos correctamente','Todo en orden');
   }
 
   function crearTablaContactosError() {
-    
+    crearNotificacionError('No se han podido leer los contactos','ERROR')
   }
 
-  function crearNotificacion(tipo,mensaje,titulo) {
-    let mensajeNotificacion = document.getElementById('mensajeNotificacion');
-    let tituloNotificacion = document.getElementById('tituloNotificacion');
+  function crearNotificacion(mensaje,titulo) {
+    document.getElementById('mensajeNotificacion').textContent = mensaje;
+    document.getElementById('tituloNotificacion').textContent = titulo;
     let elemetoNotificacion = document.getElementById('notificacion');
-    let iconoNotificacion = document.getElementById('iconoNotificacion');    
-    let notificacion = bootstrap.Toast.getOrCreateInstance(elemetoNotificacion);
-    iconoNotificacion.className = '';
-    iconoNotificacion.classList.add('bi','bi-check2-square');
-    mensajeNotificacion.textContent = mensaje;
-    tituloNotificacion.textContent = titulo;
-    elemetoNotificacion.style.backgroundColor = getComputedStyle(document.documentElement).getPropertyValue('--color-verde-oscuro');
-
-    notificacion.show();
+    bootstrap.Toast.getOrCreateInstance(elemetoNotificacion).show();
   }
+
+    function crearNotificacionOk(mensaje,titulo) {
+        crearNotificacion(mensaje,titulo);
+        notificacionIconoOk();
+        crearColorNotificacion('--color-verde-oscuro')
+    }
+    function crearNotificacionError(mensaje,titulo) {
+        crearNotificacion(mensaje,titulo);
+        notificacionIconoError();
+        crearColorNotificacion('--color-rojo-oscuro')
+    }
+    function crearNotificacionAdvertencia(mensaje,titulo) {
+        crearNotificacion(mensaje,titulo);
+        notificacionIconoAdvertencia();
+        crearColorNotificacion('--color-amarillo-oscuro')
+    }
+
+  function notificacionIconoOk() {
+    iconoNotificacion.className='';
+    iconoNotificacion.classList.add('bi','bi-check2-square');
+  }
+  function notificacionIconoError() {
+    iconoNotificacion.className='';
+    iconoNotificacion.classList.add('bi','bi-bug');
+  }
+  function notificacionIconoAdvertencia() {
+    iconoNotificacion.className='';
+    iconoNotificacion.classList.add('bi','bi-exclamation-square');
+  }
+  function crearColorNotificacion(color) {
+    let elemetoNotificacion = document.getElementById('notificacion');
+    elemetoNotificacion.style.backgroundColor = getComputedStyle(document.documentElement).getPropertyValue(color);
+  } 
+
     </script>
