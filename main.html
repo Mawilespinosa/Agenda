@@ -1,12 +1,21 @@
 <main>
-    <div class="d-flex justify-content-center mb-4">
-        <button class="btn btn-success m-3" onclick="crearTablaContactos()">
-            Mostrar Usuarios
-        </button>
-    </div>
+    <div class="d-flex justify-content-center my-3">
+        <form onsubmit="insertarContacto()" method="dialog">
+            <div class="mb-3">
+                <label for="nombre" class="form-label">Introduce el nombre del contacto</label>
+                <input type="text" id="nombre" class="form-control" name="nombre">
+            </div>
+            <div class="mb-3">
+                <label for="correo" class="form-label">Introduce el nombre del contacto</label>
+                <input type="email" id="correo" class="form-control" name="correo">
+            </div>
+            <button type="button" class="btn btn-success m-3" onclick="crearTablaContactos()">Mostrar Usuarios</button>
+            <button type="submit" class="btn btn-primary">Crear contacto</button>
+        </form>
 
-    <div class="container col-12 col-lg-6 d-flex justify-content-center" id="divContactos">
-    </div>
+    </div>  
+
+    <div class="container col-12 col-lg-6 d-flex justify-content-center" id="divContactos"></div>
 
     <!--Notificaciones-->
     <div class="position-fixed bottom-0 end-0 p-3" style="z-index:11">
