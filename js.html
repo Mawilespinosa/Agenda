@@ -4,6 +4,8 @@
   {      
     let nombre = document.getElementById('nombre').value;
     let correo = document.getElementById('correo').value;
+
+    bootstrap.Modal.getInstance(document.getElementById('crearContactoModal')).hide();
     eliminarTabla();
     crearLoaderAnillos('divContactos');
       google.script.run
