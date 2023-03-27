@@ -15,6 +15,6 @@ function obtenerContactos() {
 function doPost() {  
   return HtmlService.createTemplateFromFile('web').evaluate().setTitle('Agenda de Contactos');
 }
-function insertarContacto(nombre,correo) {
-  HOJA.appendRow([nombre,correo])
+function insertarContacto(nombre,apellido,correo,telefono) {
+  HOJA.appendRow([nombre,apellido,correo,telefono])
 }
