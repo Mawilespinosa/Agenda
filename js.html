@@ -47,26 +47,33 @@
         let tablaHeader = document.createElement('thead');
         let tablaBody = document.createElement('tbody');
 
-        for (let i = 0;i < obj.length;i++) {
+        let primeraFila = document.createElement('tr');
+        for (let i = 0;i < obj[0].length;i++) 
+        {
+          let celda = document.createElement('td');
+          celda.textContent = obj[0][i];
+          primeraFila.appendChild(celda);          
+        }
+          tablaHeader.appendChild(primeraFila);
+          tabla.appendChild(tablaHeader);
+        
+          let celdaOpciones = document.createElement('td');
+          celdaOpciones.textContent = 'OPCIONES';
+          primeraFila.appendChild(celdaOpciones);
+
+        for (let i = 1;i < obj.length;i++) {
+
             let fila = document.createElement('tr');
-            for (let j = 0;j < obj[i].length;j++) {
-                console.log(obj[i][j]);
+            for (let j = 0;j < obj[i].length;j++) {                
                 let celda = document.createElement('td');
                 celda.textContent = obj[i][j];
                 fila.appendChild(celda);
-
-                if(i==0)
-                {
-                    tablaHeader.appendChild(fila);
-                    tabla.appendChild(tablaHeader);
-                }
-                else
-                {
-                    tablaBody.appendChild(fila);
-                }
             }
-            
+          fila.appendChild(crearBotonesFila(i + 1));
+          tablaBody.appendChild(fila);
         }
+  
+
         tablaHeader.classList.add('table-dark');
         tabla.appendChild(tablaBody);
         tabla.classList.add('table','table-striped','border','border-4','border-dark');
@@ -75,6 +82,51 @@
         crearNotificacionOk('Contacto obtenidos correctamente','Todo en orden');
         eliminarLoader();
   }
+
+  function crearBotonesFila(numFila)
+  {
+    let celda = document.createElement('td');
+    celda.classList.add('text-center');
+
+    let botonBorrar = document.createElement('button');
+    botonBorrar.onclick = ()=> borrarContactos(numFila);
+    botonBorrar.classList.add('btn','btn-danger','m-1');
+    let iconoBorrar = document.createElement('i');
+    iconoBorrar.classList.add('bi','bi-trash')
+    botonBorrar.appendChild(iconoBorrar);
+
+    let botonEditar = document.createElement('button');
+    botonEditar.onclick = ()=> editarContactos(numFila);
+    botonEditar.classList.add('btn','btn-warning','m-1');
+    let iconoModificar = document.createElement('i');
+    iconoModificar.classList.add('bi','bi-pencil-square')
+    botonEditar.appendChild(iconoModificar);
+
+    celda.appendChild(botonBorrar);
+    celda.appendChild(botonEditar);
+
+    return celda
+  }
+
+  function borrarContactos(numFila){
+    eliminarTabla();
+    crearLoaderAnillos('divContactos');
+    google.script.run
+    .withSuccessHandler(borrarContactoCorrecto)
+    .withFailureHandler(borrarContactoError)
+    .eliminarContacto(numFila);
+  }
+  function borrarContactoCorrecto(){
+    crearNotificacionOk('Contacto Eleminado correctamente','Exelente');
+    eliminarLoader();
+    crearTablaContactos();
+  }
+  function borrarContactoError(){
+    crearNotificacionOk('Ups No se pudo borrar','Error');
+    eliminarLoader();
+    crearTablaContactos();
+  }
+
 
   function crearTablaContactosError() {
     crearNotificacionError('No se han podido leer los contactos','ERROR');

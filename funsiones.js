@@ -18,3 +18,7 @@ function doPost() {
 function insertarContacto(nombre,apellido,correo,telefono) {
   HOJA.appendRow([nombre,apellido,correo,telefono])
 }
+function eliminarContacto(numFila)
+{
+  HOJA.deleteRow(numFila);
+}
