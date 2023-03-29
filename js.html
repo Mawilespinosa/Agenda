@@ -18,7 +18,7 @@
   function insertarContactoCorrecto(){
     document.getElementById('nombre').value ='';
     document.getElementById('correo').value ='';
-    crearNotificacionOk('Datos cargados correctamente','Exelente');
+    crearNotificacionContacto('Datos cargados correctamente','Exelente');
     eliminarLoader();
     crearTablaContactos();
   }
@@ -111,12 +111,12 @@
     .eliminarContacto(numFila);
   }
   function borrarContactoCorrecto(){
-    crearNotificacionOk('Contacto Eleminado correctamente','Exelente');
+    crearNotificacionBorrar('Contacto Eleminado correctamente','Exelente');
     eliminarLoader();
     crearTablaContactos();
   }
   function borrarContactoError(){
-    crearNotificacionOk('Ups No se pudo borrar','Error');
+    crearNotificacionError('Ups No se pudo borrar','Error');
     eliminarLoader();
     crearTablaContactos();
   }
@@ -124,13 +124,13 @@
     crearNotificacionError('No se han podido leer los contactos','ERROR');
     eliminarLoader();
   }
-  function crearNotificacion(mensaje,titulo) {
+/*   function crearNotificacion(mensaje,titulo) {
     document.getElementById('mensajeNotificacion').textContent = mensaje;
     document.getElementById('tituloNotificacion').textContent = titulo;
     let elemetoNotificacion = document.getElementById('notificacion');
     bootstrap.Toast.getOrCreateInstance(elemetoNotificacion).show();
-  }
-  function crearNotificacionOk(mensaje,titulo) {
+  } */
+/*   function crearNotificacionOk(mensaje,titulo) {
         crearNotificacion(mensaje,titulo);
         notificacionIconoOk();
         crearColorNotificacion('--color-verde-oscuro')
@@ -139,13 +139,13 @@
         crearNotificacion(mensaje,titulo);
         notificacionIconoError();
         crearColorNotificacion('--color-rojo-oscuro')
-    }
-  function crearNotificacionAdvertencia(mensaje,titulo) {
+    } */
+/*   function crearNotificacionAdvertencia(mensaje,titulo) {
         crearNotificacion(mensaje,titulo);
         notificacionIconoAdvertencia();
         crearColorNotificacion('--color-amarillo-oscuro')
-    }
-  function notificacionIconoOk() {
+    } */
+/*   function notificacionIconoOk() {
     iconoNotificacion.className='';
     iconoNotificacion.classList.add('bi','bi-check2-square');
   }
@@ -156,11 +156,11 @@
   function notificacionIconoAdvertencia() {
     iconoNotificacion.className='';
     iconoNotificacion.classList.add('bi','bi-exclamation-square');
-  }
-  function crearColorNotificacion(color) {
+  } */
+/*   function crearColorNotificacion(color) {
     let elemetoNotificacion = document.getElementById('notificacion');
     elemetoNotificacion.style.backgroundColor = getComputedStyle(document.documentElement).getPropertyValue(color);
-  } 
+  }  */
   function crearLoader(elementoPadre) {
     eliminarLoader();
     let loader = document.createElement('div');
@@ -220,9 +220,7 @@
 
     bootstrap.Modal.getOrCreateInstance(document.getElementById('crearContactoModal')).show();
   }
-
-
-    function modificarContacto(numFila){  
+  function modificarContacto(numFila){  
     bootstrap.Modal.getOrCreateInstance(document.getElementById('crearContactoModal')).hide();
     let nombre = document.getElementById('nombre').value;
     let correo = document.getElementById('correo').value;
@@ -236,7 +234,7 @@
       .modificarContacto(numFila, {nombre, apellido, telefono, correo});
   }
   function ModificarContactoCorrecto() {
-    crearNotificacionError('Contacto editado correctamente','contacto Ok');
+    crearNotificacionContacto('Contacto editado correctamente','contacto Ok');
     eliminarLoader();
     crearTablaContactos();
   }
@@ -245,4 +243,104 @@
     eliminarLoader();
     crearTablaContactos();
   }
+
+  function importarContactos() {
+    eliminarTabla();
+    crearLoaderAnillos('divContactos');
+    google.script.run
+    .withSuccessHandler(importarContactoCorrecto)
+    .withFailureHandler(importarContactoError)
+    .importarContactos();
+  }
+  function importarContactoCorrecto() {
+    crearNotificacionOk('Contactos importados correctamente','importacion Ok');
+    eliminarLoader();
+    crearTablaContactos();
+  }
+  function importarContactoError() {
+    crearNotificacionError('No se han podido importar los contactos','ERROR');
+    eliminarLoader();
+    crearTablaContactos();
+  }
+
+
+
+
+  const  ICONO_CHECK = 'bi-check2-square'
+  const  ICONO_PAPELERA = 'bi-trash'
+  const  ICONO_CONTACTO = 'bi-person-plus-fill'
+  const  ICONO_ERROR = 'bi-bug'
+  const  ICONO_ADVERTENCIA = 'bi-exclamation-square'
+
+  function crearNotificacionOk(mensaje,titulo){
+    crearNotificacion(titulo,mensaje,ICONO_CHECK,'--color-verde-oscuro');
+  }
+  function crearNotificacionError(mensaje,titulo){
+    crearNotificacion(titulo,mensaje,ICONO_ERROR,'--color-rojo-oscuro');
+  }
+  function crearNotificacionContacto(mensaje,titulo){
+    crearNotificacion(titulo,mensaje,ICONO_CONTACTO,'--color-azul-oscuro');
+  }
+  function crearNotificacionAdvertencia(mensaje,titulo){
+    crearNotificacion(titulo,mensaje,ICONO_ADVERTENCIA,'--color-amarillo-oscuro');
+  }
+  function crearNotificacionBorrar(mensaje,titulo){
+    crearNotificacion(titulo,mensaje,ICONO_PAPELERA,'--color-gris-oscuro');
+  }
+
+  function crearNotificacion(titulo,mensaje,icono,color) {
+    let notificacion = crearAtributosNotificacion();
+    let cabeceraNotificacion = crearCabeceraNotificacion(titulo,icono);
+    let cuerpoNotificacion = crearCuerpoNotificacion(mensaje);  
+
+    notificacion.appendChild(cabeceraNotificacion);
+    notificacion.appendChild(cuerpoNotificacion);
+
+    notificacion.style.backgroundColor = getComputedStyle(document.documentElement).getPropertyValue(color);
+
+    notificacion.addEventListener('hidden-bs-toast',function(){
+      this.remove();
+    })
+    document.getElementById('contenedorNotificaciones').appendChild(notificacion);
+    bootstrap.Toast.getOrCreateInstance(notificacion).show();
+  }
+  function crearCuerpoNotificacion(mensaje) {
+    let cuerpoNotificacion = document.createElement('div');
+    cuerpoNotificacion.classList.add('toast-body');
+    cuerpoNotificacion.textContent = mensaje;
+    return cuerpoNotificacion;
+  }
+  function crearCabeceraNotificacion(titulo,icono) {
+    let cabeceraNotificacion = document.createElement('div');
+    cabeceraNotificacion.classList.add('toast-header','p-0');
+
+    crearIconoNotificacion(cabeceraNotificacion,icono);
+    
+    let tituloNotificacion = document.createElement('strong');
+    tituloNotificacion.classList.add('mx-2');
+    tituloNotificacion.textContent = titulo;
+    cabeceraNotificacion.appendChild(tituloNotificacion);
+    return cabeceraNotificacion;
+  }
+  function crearIconoNotificacion(contenedor,icono) {
+    let divIcono = document.createElement('div');
+    let iconoNotificacion = document.createElement('i');
+    divIcono.classList.add('icono-notificacion');
+    iconoNotificacion.classList.add('bi', icono);
+    divIcono.appendChild(iconoNotificacion);
+    contenedor.appendChild(divIcono);
+  }
+  function crearAtributosNotificacion() {
+    let notificacion = document.createElement('div');
+    notificacion.classList.add('toast','aling-items-center','text-white','border-0');
+    notificacion.setAttribute('role','alert');
+    notificacion.setAttribute('aria-live','assertive');
+    notificacion.setAttribute('aria-atomic','true');
+    return notificacion;
+  } 
+
+
+
+
+
 </script>
