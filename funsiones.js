@@ -29,7 +29,7 @@ function modificarContacto(numFila,datos){
 }
 
 function importarContactos() {
-  let url ='https://randomuser.me/api/?results=5&inc=name,email,phone';
+  let url ='https://randomuser.me/api/?results=5&inc=name,email,phone,picture';
   let respuesta = UrlFetchApp.fetch(url).getContentText();
   let datos = JSON.parse(respuesta);
   datos.results.forEach(contacto => insertarContactoExterno(contacto));
@@ -37,7 +37,7 @@ function importarContactos() {
 }
 
 function insertarContactoExterno(datos){
-  HOJA.appendRow([datos.name.first,datos.name.last,datos.email,datos.phone])
+  HOJA.appendRow([datos.name.first,datos.name.last,datos.email,datos.phone,datos.picture.medium])
 }
 
 
