@@ -17,7 +17,10 @@
     eliminarTarjetas();
     crearLoaderPuntos('divContactos');
   }
-  
+  function Mostrar() {
+    crearTarjetasContactos();
+    eliminarLoader();
+  }
   /* insertarContactos */
   function insertarContacto() {
     limpiar();
@@ -37,8 +40,7 @@
     document.getElementById('nombre').value = '';
     document.getElementById('correo').value = '';
     crearNotificacionContacto('Datos cargados correctamente', 'Exelente');
-    eliminarLoader();
-    crearTablaContactos();
+    Mostrar();
   }
   function insertarContactoError() {
     crearNotificacionError('Ha habido un error en el ingreso de datos', 'Error');
@@ -94,13 +96,11 @@
   }
   function borrarContactoCorrecto() {
     crearNotificacionBorrar('Contacto Eleminado correctamente', 'Exelente');
-    eliminarLoader();
-    crearTablaContactos();
+    Mostrar();
   }
   function borrarContactoError() {
     crearNotificacionError('Ups No se pudo borrar', 'Error');
-    eliminarLoader();
-    crearTablaContactos();
+    Mostrar();
   }
 
   /* modificar Contactos */
@@ -118,14 +118,11 @@
   }
   function ModificarContactoCorrecto() {
     crearNotificacionContacto('Contacto editado correctamente', 'contacto Ok');
-    eliminarLoader();
-    crearTablaContactos();
+    Mostrar();
   }
   function ModificarContactoError() {
     crearNotificacionError('No se han podido editar los contactos', 'ERROR');
-    eliminarLoader();
-    crearTablaContactos();
+    Mostrar();
   }
-
 
 </script>
