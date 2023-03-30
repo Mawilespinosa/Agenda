@@ -1,0 +1,93 @@
+<script>
+    function crearTablaContactos() {
+        limpiar();
+        google.script.run
+            .withSuccessHandler(crearTablaContactosCorrecta)
+            .withFailureHandler(crearTablaContactosError)
+            .obtenerContactos();
+    }
+    function crearTablaContactosCorrecta(obj) {
+        eliminarTabla();
+        tabla = document.createElement('table');
+        tabla.id = 'tablaContactos';
+
+        let tablaHeader = document.createElement('thead');
+        let tablaBody = document.createElement('tbody');
+
+        let primeraFila = document.createElement('tr');
+        for (let i = 0; i < obj[0].length; i++) {
+            let celda = document.createElement('td');
+            celda.textContent = obj[0][i];
+            primeraFila.appendChild(celda);
+        }
+        tablaHeader.appendChild(primeraFila);
+        tabla.appendChild(tablaHeader);
+
+        let celdaOpciones = document.createElement('td');
+        celdaOpciones.textContent = 'OPCIONES';
+        primeraFila.appendChild(celdaOpciones);
+
+        for (let i = 1; i < obj.length; i++) {
+
+            let fila = document.createElement('tr');
+            for (let j = 0; j < obj[i].length; j++) {
+                let celda = document.createElement('td');
+                celda.textContent = obj[i][j];
+                fila.appendChild(celda);
+
+                if (j == 4) {
+                    celda.textContent = ''
+                    let imagen = document.createElement('img');
+                    imagen.classList.add('img-fluid', 'rounded');
+                    imagen.src = obj[i][j];
+                    celda.appendChild(imagen);
+
+                }
+
+            }
+            fila.appendChild(crearBotonesFila(i + 1, obj[i]));
+            tablaBody.appendChild(fila);
+        }
+
+
+        tablaHeader.classList.add('table-dark');
+        tabla.appendChild(tablaBody);
+        tabla.classList.add('table', 'table-striped', 'border', 'border-4', 'border-dark');
+        document.getElementById('divContactos').appendChild(tabla);
+
+        crearNotificacionOk('Contacto obtenidos correctamente', 'Todo en orden');
+        eliminarLoader();
+    }
+    function crearBotonesFila(numFila, datosContacto) {
+        let celda = document.createElement('td');
+        celda.classList.add('text-center');
+
+        let botonBorrar = document.createElement('button');
+        botonBorrar.onclick = () => borrarContactos(numFila);
+        botonBorrar.classList.add('btn', 'btn-danger', 'm-1');
+        let iconoBorrar = document.createElement('i');
+        iconoBorrar.classList.add('bi', 'bi-trash')
+        botonBorrar.appendChild(iconoBorrar);
+
+        let botonEditar = document.createElement('button');
+        botonEditar.onclick = () => AbrirModalModificarContactos(numFila, datosContacto);
+        botonEditar.classList.add('btn', 'btn-warning', 'm-1');
+        let iconoModificar = document.createElement('i');
+        iconoModificar.classList.add('bi', 'bi-pencil-square')
+        botonEditar.appendChild(iconoModificar);
+
+        celda.appendChild(botonBorrar);
+        celda.appendChild(botonEditar);
+
+        return celda
+    }
+    function crearTablaContactosError() {
+        crearNotificacionError('No se han podido leer los contactos', 'ERROR');
+        eliminarLoader();
+    }
+    function eliminarTabla() {
+        let tabla = document.getElementById('tablaContactos');
+        if (tabla) tabla.remove();
+    }
+
+</script>

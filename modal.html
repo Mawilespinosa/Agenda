@@ -1,0 +1,34 @@
+<script>
+    function abrirModalCrearContacto() {
+        let boton = document.getElementById('botonCrearModificar');
+        boton.textContent = 'Crear Contacto'
+        boton.classList = '';
+        boton.classList.add('btn', 'btn-success');
+        document.getElementById('tituloModal').textContent = 'Crear Contacto';
+
+        document.getElementById('formulario').onsubmit = () => insertarContacto();
+
+        document.getElementById('nombre').value = '';
+        document.getElementById('apellidos').value = '';
+        document.getElementById('tel').value = '';
+        document.getElementById('correo').value = '';
+
+        bootstrap.Modal.getOrCreateInstance(document.getElementById('crearContactoModal')).show();
+    }
+    function AbrirModalModificarContactos(numFila, datosContacto) {
+        let boton = document.getElementById('botonCrearModificar');
+        boton.textContent = 'Modificar'
+        boton.classList = '';
+        boton.classList.add('btn', 'btn-warning');
+        document.getElementById('tituloModal').textContent = 'Modificar Contacto';
+
+        document.getElementById('formulario').onsubmit = () => modificarContacto(numFila);
+
+        document.getElementById('nombre').value = datosContacto.nombre;
+        document.getElementById('apellidos').value = datosContacto.apellido;
+        document.getElementById('correo').value = datosContacto.correo;
+        document.getElementById('tel').value = datosContacto.tel;
+
+        bootstrap.Modal.getOrCreateInstance(document.getElementById('crearContactoModal')).show();
+    } 
+</script>

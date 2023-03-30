@@ -1,0 +1,20 @@
+<script>
+    function importarContactos() {
+        limpiar();
+        google.script.run
+            .withSuccessHandler(importarContactoCorrecto)
+            .withFailureHandler(importarContactoError)
+            .importarContactos();
+    }
+    function importarContactoCorrecto() {
+        crearNotificacionOk('Contactos importados correctamente', 'importacion Ok');
+        eliminarLoader();
+        crearTablaContactos();
+    }
+    function importarContactoError() {
+        crearNotificacionError('No se han podido importar los contactos', 'ERROR');
+        eliminarLoader();
+        crearTablaContactos();
+    }
+
+</script>
