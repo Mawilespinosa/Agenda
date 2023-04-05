@@ -1,29 +1,29 @@
 <script>
     function extraerContactos(datos) {
-        let contactos =[];
+        let contactos = [];
         for (let i = 1; i < datos.length; i++) {
             let = contacto =
             {
-                nombre:datos[i][0],
-                apellido:datos[i][1],
-                correo:datos[i][2],
-                tel:datos[i][3],
-                imagen:datos[i][4],
-                fila:i+1
+                nombre: datos[i][0],
+                apellido: datos[i][1],
+                correo: datos[i][2],
+                tel: datos[i][3],
+                imagen: datos[i][4],
+                fila: i + 1
             };
             contactos.push(contacto)
         }
         return contactos;
     }
     function extraerColumnas(datos) {
-        let columnas =[];
+        let columnas = [];
         for (let i = 0; i < datos[0].length; i++) {
-            columnas.push(datos[0][i]);            
+            columnas.push(datos[0][i]);
         }
         columnas.push('OPCIONES');
         return columnas
     }
-    
+
     function crearTablaContactos() {
         limpiar();
         google.script.run
@@ -32,7 +32,7 @@
             .obtenerContactos();
     }
     function crearTablaContactosCorrecta(datos) {
-        
+
         //extraer contactos y columnas
         let contactos = extraerContactos(datos);
         let columnas = extraerColumnas(datos);
@@ -72,8 +72,8 @@
 
     function crearBodyTabla(contactos) {
         let tablaBody = document.createElement('tbody');
-        contactos.forEach(contacto=>{
-            let fila = document.createElement('tr'); 
+        contactos.forEach(contacto => {
+            let fila = document.createElement('tr');
             fila.appendChild(crearCelda(contacto.nombre));
             fila.appendChild(crearCelda(contacto.apellido));
             fila.appendChild(crearCelda(contacto.correo));
@@ -85,41 +85,28 @@
         return tablaBody;
     }
 
-        function crearCelda(dato) {
-            let celda = document.createElement('td');
-            celda.textContent = dato;
-            return celda;
-        }
+    function crearCelda(dato) {
+        let celda = document.createElement('td');
+        celda.textContent = dato;
+        return celda;
+    }
     function crearCeldaImagen(rutaImagen) {
         let celda = document.createElement('td');
         let imagen = document.createElement('img');
-        imagen.classList.add('img-fluid','rounded');
+        imagen.classList.add('img-fluid', 'rounded');
         imagen.src = rutaImagen;
         celda.appendChild(imagen);
 
-        return celda;   
+        return celda;
     }
-   
+
     function crearBotonesFila(contacto) {
         let celda = document.createElement('td');
         celda.classList.add('text-center');
 
-        let botonBorrar = document.createElement('button');
-        botonBorrar.onclick = () => borrarContactos(contacto.fila);
-        botonBorrar.classList.add('btn', 'btn-danger', 'm-1');
-        let iconoBorrar = document.createElement('i');
-        iconoBorrar.classList.add('bi', 'bi-trash')
-        botonBorrar.appendChild(iconoBorrar);
-
-        let botonEditar = document.createElement('button');
-        botonEditar.onclick = () => AbrirModalModificarContactos(contacto);
-        botonEditar.classList.add('btn', 'btn-warning', 'm-1');
-        let iconoModificar = document.createElement('i');
-        iconoModificar.classList.add('bi', 'bi-pencil-square')
-        botonEditar.appendChild(iconoModificar);
-
-        celda.appendChild(botonBorrar);
-        celda.appendChild(botonEditar);
+        celda.appendChild(crearBotonInfoContacto(contacto));
+        celda.appendChild(crearbotonBorrarContacto(contacto));
+        celda.appendChild(crearbotonModificarContacto(contacto));
 
         return celda
     }
