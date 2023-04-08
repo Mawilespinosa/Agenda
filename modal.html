@@ -1,4 +1,9 @@
 <script>
+    const urlAccesoDrive = 'https://drive.google.com/uc?export=view&id=';
+    const idImagenPorDefecto = '1EeVGaiPeSgW1EbBdttNJc3fjtOKcojM_';
+    
+    const IMAGEN_PERFIL_INICIO = urlAccesoDrive+idImagenPorDefecto;
+    console.log(IMAGEN_PERFIL_INICIO);
     function abrirModalCrearContacto() {
         let boton = document.getElementById('botonCrearModificar');
         boton.textContent = 'Crear Contacto'
@@ -12,6 +17,8 @@
         document.getElementById('apellidos').value = '';
         document.getElementById('tel').value = '';
         document.getElementById('correo').value = '';
+        document.getElementById('imagen').value='';
+        document.getElementById('imgForm').src = IMAGEN_PERFIL_INICIO;
 
         bootstrap.Modal.getOrCreateInstance(document.getElementById('crearContactoModal')).show();
     }

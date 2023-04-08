@@ -11,7 +11,7 @@
   <!--Notificaciones-->
   <div class="divNorificaciones position-fixed bottom-0 end-0 p-3">
     <div class="toast-container" id="contenedorNotificaciones"></div>
-<!--     <div id="notificacion" class="toast align-items-center text-white border-0" role="alert" aria-live="assertive"
+    <!--     <div id="notificacion" class="toast align-items-center text-white border-0" role="alert" aria-live="assertive"
       aria-atomic="true">
       <div class="toast-header p-0">
         <div class="icono-notificacion"><i id="iconoNotificacion"></i></div>
@@ -21,7 +21,7 @@
       <div class="toast-body" id="mensajeNotificacion">
       </div>
     </div> -->
-  </div>   
+  </div>
   <!-- Modal -->
   <div class="modal fade" id="crearContactoModal" tabindex="-1" aria-labelledby="tituloCrearContactoModal"
     aria-hidden="true">
@@ -33,26 +33,55 @@
         </div>
         <form onsubmit="insertarContacto()" method="dialog" id="formulario">
           <div class="modal-body">
-            <!-- Nombres y apellidos -->
+
             <div class="row mb-3">
-              <div class="col-4">
-                <label for="nombre" class="form-label">nombre</label>
-                <input type="text" id="nombre" class="form-control" name="nombre" pattern="[\D]*" title="El nombre no debe tener numeros" required>
+              <!-- parte izquierda -->
+              <div class="col-6 d-flex flex-column">
+                <!-- Nombre -->
+                <div class="mb-2">
+                  <label for="nombre" class="form-label">nombre</label>
+                  <input type="text" id="nombre" class="form-control" name="nombre" pattern="[\D]*"
+                    title="El nombre no debe tener numeros" required>
+                </div>
+
+                <!-- Apellidos -->
+
+                <div class="mb-2">
+                  <label for="apellido" class="form-label">Apellido</label>
+                  <input type="text" id="apellidos" class="form-control" name="apellidos" pattern="[^0-9]*"
+                    title="El pellido no debe tener numeros" required>
+
+                </div>
+                <!-- Correo -->
+
+                <div class="input-group mb-2">
+                  <span class="input-group-text"><i class="bi bi-envelope-fill"></i></span>
+                  <input type="email" id="correo" class="form-control" name="correo" required>
+                </div>
+                <!-- Telefono -->
+
+                <div class="input-group mb-2">
+                  <span class="input-group-text"><i class="bi bi-telephone-fill"></i></span>
+                  <input type="tel" id="tel" class="form-control" name="telf" pattern="[\d]{9,11}"
+                    title="El numero debe contener entre 9 y 11 digitos" required>
+                </div>
+                <!-- Archivo -->
+
+                <div class="mb-2">
+                  <label for="imagen" class="form-label">Selecciona una imagen para el contacto</label>
+                  <input type="file" class="form-control" accept="imagen/*" id="imagen" name="imagen">
+                </div>
+
               </div>
-              <div class="col-8">
-                <label for="apellido" class="form-label">Apellido</label>
-                <input type="text" id="apellidos" class="form-control" name="apellidos"pattern="[^0-9]*" title="El pellido no debe tener numeros" required>
+              <!-- parte derecha -->
+              <div class="col-6 d-flex justify-content-center justify-items-center p-0">
+                <img class="img-fluit img-form" id="imgForm" alt="Imagen de Contacto">
               </div>
+
             </div>
+
           </div>
-          <!-- Correo y telefono -->
-            <div class="input-group mb-3">
-              <span class="input-group-text"><i class="bi bi-telephone-fill"></i></span>
-              <input type="tel" id="tel" class="form-control" name="telf" pattern="[\d]{9,11}" title="El numero debe contener entre 9 y 11 digitos" required>
-              <span class="input-group-text"><i class="bi bi-envelope-fill"></i></span>
-              <input type="email" id="correo" class="form-control" name="correo" required>
-            </div>
-          
+          <!-- Correo y telefono -->    
           <div class="modal-footer">
             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
             <button id="botonCrearModificar" type="submit" class="btn btn-success">Crear Contacto</button>

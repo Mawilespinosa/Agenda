@@ -7,7 +7,11 @@
     if (this.window.scrollY < 500) {
       document.getElementById('botonSubir').style.transform = "scale(0)"
     }
-  })
+  });
+
+  document.getElementById('imagen').addEventListener('change', function(){
+    document.getElementById('imgForm').src = URL.createObjectURL(this.files[0])
+  });
 
   function subirArriba() {
     document.documentElement.scrollTop = 0
@@ -23,19 +27,51 @@
   }
   /* insertarContactos */
   function insertarContacto() {
+    
     limpiar();
-    let nombre = document.getElementById('nombre').value;
-    let correo = document.getElementById('correo').value;
-    let apellido = document.getElementById('apellidos').value;
-    let telefono = document.getElementById('tel').value;
-
     bootstrap.Modal.getInstance(document.getElementById('crearContactoModal')).hide();
 
-    google.script.run
-      .withSuccessHandler(insertarContactoCorrecto)
-      .withFailureHandler(insertarContactoError)
-      .insertarContacto(nombre, apellido, correo, telefono);
+    let contacto = contactos();
+    let archivo = document.getElementById('imagen').files[0];
+    if(archivo){
+      subirImagen(contacto,archivo);
+    } else {
+      google.script.run
+        .withSuccessHandler(insertarContactoCorrecto)
+        .withFailureHandler(insertarContactoError)
+        .insertarContacto(contacto);
+    }
+
   }
+
+  function subirImagen(contacto,archivo){
+    let fr = new FileReader();
+    fr.readAsArrayBuffer(archivo);
+    fr.onload = function(){
+      let imagen = {
+        nombre: archivo.name,
+        tipo: archivo.type,
+        datos: Array.from(new Int8Array(this.result))
+      };
+      google.script.run
+        .withSuccessHandler(insertarContactoCorrecto)
+        .withFailureHandler(insertarContactoError)
+        .insertarContacto(contacto,imagen);
+    }
+  }
+
+    function contactos() {
+      let contacto = {
+         nombre : document.getElementById('nombre').value,
+         correo : document.getElementById('correo').value,
+         apellido : document.getElementById('apellidos').value,
+         tel : document.getElementById('tel').value,
+         img : document.getElementById('imgForm').src,
+      };
+      return contacto;
+    }
+
+
   function insertarContactoCorrecto() {
     document.getElementById('nombre').value = '';
     document.getElementById('correo').value = '';
