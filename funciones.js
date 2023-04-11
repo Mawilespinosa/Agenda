@@ -18,20 +18,24 @@ function doPost() {
   return HtmlService.createTemplateFromFile('web').evaluate().setTitle('Agenda de Contactos');
 }
 function insertarContacto(contacto,imagen) {
-  if(imagen){
-    let blob = Utilities.newBlob(imagen.datos,imagen.tipo,imagen.nombre);
-    let archivo = CARPETA.createFile(blob);
-    contacto.imagen = urlAccesoDrive+archivo.getId();
-  }
+  if(imagen) contacto.imagen = guardarImagen(imagen);
+  
   HOJA.appendRow([contacto.nombre, contacto.apellido, contacto.correo, contacto.tel,contacto.imagen]);
 }
 function eliminarContacto(numFila) {
   HOJA.deleteRow(numFila);
 }
 
-function modificarContacto(numFila, datos) {
-  let celdas = HOJA.getRange('A' + numFila + ':D' + numFila);
-  celdas.setValues([[datos.nombre, datos.apellido, datos.correo, datos.telefono]]);
+function modificarContacto(contacto,imagen) {
+  if(imagen) contacto.imagen = guardarImagen(imagen);
+  let celdas = HOJA.getRange('A' + contacto.fila + ':E' + contacto.fila);
+  celdas.setValues([[contacto.nombre, contacto.apellido, contacto.correo, contacto.tel,contacto.img]]);
+}
+
+function guardarImagen(imagen){
+  let blob = Utilities.newBlob(imagen.datos,imagen.tipo,imagen.nombre);
+  let archivo = CARPETA.createFile(blob);
+  return urlAccesoDrive+archivo.getId();
 }
 
 function importarContactos() {
